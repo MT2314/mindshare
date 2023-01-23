@@ -1,13 +1,11 @@
 const express = require("express");
 const path = require("path");
+require("dotenv").config({ path: "./config.env" });
 
 const mongoose = require("mongoose");
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 const passport = require("passport");
-
-
-
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
@@ -22,21 +20,18 @@ if (process.env.NODE_ENV === "production") {
 const routes = require("./routes");
 app.use(routes);
 
-
 // Passport middleware
 app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 
 // How to connect locally "mongodb://localhost/YOUR DATA BASE NAME"
-mongoose.connect(
-  process.env.MONGODB_URI || 'mongodb://localhost/journal', {
+mongoose.connect(process.env.ATLAS_URI || "mongodb://localhost/journal", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
-  useFindAndModify: false
-}
-);
+  useFindAndModify: false,
+});
 
 // Start the API server
 app.listen(PORT, function () {
